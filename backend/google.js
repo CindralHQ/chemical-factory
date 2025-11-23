@@ -1,3 +1,4 @@
+// google.js
 import { google } from "googleapis";
 import dotenv from "dotenv";
 
@@ -9,50 +10,81 @@ const auth = new google.auth.GoogleAuth({
     private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, "\n")
   },
   scopes: [
-    "https://www.googleapis.com/auth/documents.readonly",
     "https://www.googleapis.com/auth/spreadsheets.readonly",
+    "https://www.googleapis.com/auth/documents.readonly",
     "https://www.googleapis.com/auth/drive.readonly"
   ]
 });
 
-// -------- FETCH GOOGLE DOC AS HTML ------------
+
+// ------------------------------------------------------
+// 🔵 Convert Google Drive Share Links → Direct Image URL
+// ------------------------------------------------------
+function convertDriveLink(url) {
+  if (!url) return "";
+
+  // Match share links like:
+  // https://drive.google.com/file/d/FILE_ID/view?usp=sharing
+  const match = url.match(/\/d\/(.*?)\//);
+
+  if (match && match[1]) {
+    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  }
+
+  return url; // already clean
+}
+
+
+// ------------------------------------------------------
+// 🔵 GET GOOGLE DOC AS HTML
+// ------------------------------------------------------
 export async function getDocWithMeta(docId) {
   const client = await auth.getClient();
   const docs = google.docs({ version: "v1", auth: client });
 
-  const res = await docs.documents.get({
-    documentId: docId,
-  });
+  const res = await docs.documents.get({ documentId: docId });
 
   let html = "";
-  for (const element of res.data.body.content) {
-    if (element.paragraph) {
-      for (const run of element.paragraph.elements) {
-        if (run.textRun) html += `<p>${run.textRun.content}</p>`;
+  for (const block of res.data.body.content || []) {
+    if (!block.paragraph) continue;
+
+    for (const el of block.paragraph.elements || []) {
+      if (el.textRun?.content) {
+        html += `<p>${el.textRun.content}</p>`;
       }
     }
   }
 
-  return {
-    html,
-    etag: res.headers.etag, // ⭐ ETag here
-  };
+  return { html };
 }
 
 
-// -------- FETCH GOOGLE SHEET AS JSON ----------
+// ------------------------------------------------------
+// 🔵 GET GOOGLE SHEET (Auto-convert Drive links)
+// ------------------------------------------------------
 export async function getSheet(sheetId) {
-  const sheets = google.sheets({ version: "v4", auth: await auth.getClient() });
+  const client = await auth.getClient();
+  const sheets = google.sheets({ version: "v4", auth: client });
 
   const res = await sheets.spreadsheets.values.get({
     spreadsheetId: sheetId,
-    range: "Sheet1"
+    range: "Sheet1!A1:Z1000"
   });
 
-  return res.data.values;
+  let rows = res.data.values || [];
+
+  // Convert every cell in sheet
+  rows = rows.map(row =>
+    row.map(col => convertDriveLink(col))
+  );
+
+  return rows;
 }
 
-// -------- FETCH GOOGLE DRIVE FILES FROM FOLDER ------
+
+// ------------------------------------------------------
+// 🔵 GET FILES FROM DRIVE FOLDER
+// ------------------------------------------------------
 export async function getDriveFiles(folderId) {
   const drive = google.drive({ version: "v3", auth: await auth.getClient() });
 
@@ -61,8 +93,7 @@ export async function getDriveFiles(folderId) {
     fields: "files(id, name, mimeType)"
   });
 
-  // Return public URLs for frontend
-  return res.data.files.map((file) => ({
+  return res.data.files.map(file => ({
     id: file.id,
     name: file.name,
     mimeType: file.mimeType,

@@ -1,8 +1,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import products from "./product.js";
+import useProducts from "./useProducts";
+
 
 const ProductCard = () => {
+
+  const products = useProducts();
+  console.log(products);
   return (
     <div className="w-full px-6 py-12">
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-10">
@@ -40,7 +44,7 @@ const ProductCard = () => {
                 <h2 className="text-xl font-semibold">{product.title}</h2>
 
                 <p className="mt-2 text-sm text-gray-300">
-                  <span className="font-medium">CNS No:</span> {product.cnsNo}
+                  <span className="font-medium">CAS No:</span> {product.casNo}
                 </p>
 
                 {/* Button always at the bottom */}
