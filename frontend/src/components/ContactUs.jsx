@@ -1,35 +1,28 @@
 import React from "react";
-import { Phone, Mail, MapPin, Globe, Share2, Send, Pin } from "lucide-react";
 import siteConfig from "../config/siteConfig.js";
+import MaterialIcon from "./MaterialIcon.jsx";
 
 const contactDetails = [
   {
-    icon: Phone,
+    icon: "call",
     label: "Chat with us",
     value: siteConfig.contact.phone,
     helper: "Dedicated chemical specialists",
     href: `tel:${siteConfig.contact.phoneHref}`,
   },
   {
-    icon: Mail,
+    icon: "mail",
     label: "Mail a brief",
     value: siteConfig.contact.salesEmail,
     helper: "Responses within 24 hours",
     href: `mailto:${siteConfig.contact.salesEmail}`,
   },
   {
-    icon: MapPin,
+    icon: "location_on",
     label: "Visit our lab",
     value: siteConfig.contact.address,
     helper: "Mon - Fri, 9 am to 7 pm",
   },
-];
-
-const socialIcons = [
-  { icon: Globe, href: siteConfig.social.website || "#" },
-  { icon: Share2, href: siteConfig.social.twitter || "#" },
-  { icon: Send, href: siteConfig.social.linkedin || "#" },
-  { icon: Pin, href: siteConfig.social.instagram || "#" },
 ];
 
 const ContactUs = () => {
@@ -49,7 +42,7 @@ const ContactUs = () => {
             {contactDetails.map(({ icon: Icon, label, value, helper, href }) => (
               <div key={label} className="flex items-start gap-4">
                 <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white">
-                  <Icon size={22} />
+                  <MaterialIcon name={Icon} className="text-[22px]" />
                 </div>
                 <div>
                   <p className="text-xs uppercase tracking-[0.35em] text-base-content/60">
@@ -74,15 +67,15 @@ const ContactUs = () => {
           </div>
 
           <div className="mt-8 flex gap-4 text-base-content/70">
-            {socialIcons.map(({ icon: Icon, href }, index) => (
+            {siteConfig.socialLinks.map((link) => (
               <a
-                key={Icon.displayName || Icon.name || index}
-                href={href}
+                key={link.label}
+                href={link.href}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-base-200 bg-base-100 hover:border-primary/50"
                 target="_blank"
                 rel="noreferrer"
               >
-                <Icon size={18} />
+                <MaterialIcon name={link.icon} className="text-lg" />
               </a>
             ))}
           </div>

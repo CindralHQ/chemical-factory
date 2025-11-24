@@ -34,6 +34,8 @@ const Hero = () => {
               Our story
             </Link>
           </div>
+        </div>
+        <div className="space-y-6">
           <div className="grid gap-4 sm:grid-cols-3">
             {heroStats.map((stat) => (
               <div
@@ -49,40 +51,42 @@ const Hero = () => {
               </div>
             ))}
           </div>
-        </div>
-        <div className="relative">
-          <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 blur-3xl" />
-          <div className="relative rounded-3xl border border-base-300 bg-base-100 p-6 shadow-xl space-y-6">
-            <div className="rounded-2xl border border-base-200 bg-base-100 p-6">
-              <p className="text-sm font-semibold text-primary">Pulse labs</p>
-              <p className="text-2xl font-bold mt-2 text-base-content">
-                ISO-backed production
-              </p>
-              <p className="mt-2 text-base-content/60 text-sm">
-                Every molecule is validated with GC, HPLC and microbial testing
-                before dispatch.
-              </p>
-            </div>
-            <div className="rounded-2xl border border-base-200 bg-base-100 p-6">
-              <p className="text-sm font-semibold text-primary">Documents ready</p>
-              <p className="mt-2 text-base-content/80">
-                MSDS, TDS and regulatory support delivered digitally with every
-                order.
-              </p>
-              <ul className="mt-4 space-y-2 text-sm text-base-content/70">
-                <li className="flex items-center gap-2">
-                  <span className="badge badge-success badge-xs"></span>
-                  Antimicrobial actives
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="badge badge-success badge-xs"></span>
-                  Cosmetic intermediates
-                </li>
-                <li className="flex items-center gap-2">
-                  <span className="badge badge-success badge-xs"></span>
-                  Coating additives
-                </li>
-              </ul>
+          <div className="relative">
+            <div className="absolute -inset-4 bg-gradient-to-br from-primary/20 to-secondary/20 blur-3xl" />
+            <div className="relative rounded-3xl border border-base-300 bg-base-100 p-6 shadow-xl space-y-6">
+              <div className="rounded-2xl border border-base-200 bg-base-100 p-6">
+                <p className="text-sm font-semibold text-primary">Pulse labs</p>
+                <p className="text-2xl font-bold mt-2 text-base-content">
+                  ISO-backed production
+                </p>
+                <p className="mt-2 text-base-content/60 text-sm">
+                  Every molecule is validated with GC, HPLC and microbial testing
+                  before dispatch.
+                </p>
+              </div>
+              <div className="rounded-2xl border border-base-200 bg-base-100 p-6">
+                <p className="text-sm font-semibold text-primary">
+                  Documents ready
+                </p>
+                <p className="mt-2 text-base-content/80">
+                  MSDS, TDS and regulatory support delivered digitally with every
+                  order.
+                </p>
+                <ul className="mt-4 space-y-2 text-sm text-base-content/70">
+                  <li className="flex items-center gap-2">
+                    <span className="badge badge-success badge-xs"></span>
+                    Antimicrobial actives
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="badge badge-success badge-xs"></span>
+                    Cosmetic intermediates
+                  </li>
+                  <li className="flex items-center gap-2">
+                    <span className="badge badge-success badge-xs"></span>
+                    Coating additives
+                  </li>
+                </ul>
+              </div>
             </div>
           </div>
         </div>

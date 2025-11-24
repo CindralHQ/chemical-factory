@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import MaterialIcon from "../../MaterialIcon.jsx";
 
 const ProductCard = ({ product }) => {
   const { title, casNo, category, description, image, id } = product;
@@ -44,20 +45,10 @@ const ProductCard = ({ product }) => {
         <div className="mt-auto pt-6">
           <span className="inline-flex items-center gap-2 text-sm font-semibold text-primary">
             View specification
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-4 w-4 transition-transform group-hover:translate-x-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="1.6"
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <MaterialIcon
+              name="arrow_forward"
+              className="text-lg transition-transform group-hover:translate-x-1"
+            />
           </span>
         </div>
       </article>

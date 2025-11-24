@@ -1,6 +1,6 @@
 import React from "react";
-import { PhoneCall, Mail, MessageCircle, Headset } from "lucide-react";
 import siteConfig from "../config/siteConfig.js";
+import MaterialIcon from "./MaterialIcon.jsx";
 
 const ConnectFab = () => {
   return (
@@ -11,7 +11,7 @@ const ConnectFab = () => {
           className="btn btn-primary btn-circle btn-lg shadow-2xl p-5"
           aria-label="Open contact options"
         >
-          <Headset className="h-6 w-6" />
+          <MaterialIcon name="support_agent" className="text-2xl" />
         </label>
         <ul
           tabIndex={0}
@@ -22,7 +22,7 @@ const ConnectFab = () => {
               href={`tel:${siteConfig.contact.phoneHref}`}
               className="flex items-center gap-3"
             >
-              <PhoneCall className="h-4 w-4" />
+              <MaterialIcon name="call" className="text-lg" />
               Phone Call
             </a>
           </li>
@@ -31,7 +31,7 @@ const ConnectFab = () => {
               href={`mailto:${siteConfig.contact.salesEmail}`}
               className="flex items-center gap-3"
             >
-              <Mail className="h-4 w-4" />
+              <MaterialIcon name="mail" className="text-lg" />
               Mail
             </a>
           </li>
@@ -42,7 +42,7 @@ const ConnectFab = () => {
               rel="noreferrer"
               className="flex items-center gap-3"
             >
-              <MessageCircle className="h-4 w-4" />
+              <MaterialIcon name="chat" className="text-lg" />
               WhatsApp
             </a>
           </li>

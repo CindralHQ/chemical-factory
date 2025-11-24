@@ -1,26 +1,31 @@
 import React from "react";
+import MaterialIcon from "../MaterialIcon.jsx";
 
 const categories = [
   {
     title: "Antimicrobial Actives",
+    icon: "coronavirus",
     description:
       "High-purity antibacterial and antifungal molecules for disinfectants, hygiene and healthcare products.",
     points: [">99% assay", "Stability tested", "Global registrations"],
   },
   {
     title: "Polymer & Coating Intermediates",
+    icon: "ink_pen",
     description:
       "Advanced building blocks for adhesives, sealants and protective coatings with tight specs.",
     points: ["Adhesion boost", "Weather resistant", "Low VOC"],
   },
   {
     title: "API & Pharma Inputs",
+    icon: "vaccines",
     description:
       "Regulatory-compliant APIs and intermediates tailored for formulation scientists.",
     points: ["DMF ready", "cGMP support", "Batch traceability"],
   },
   {
     title: "Cosmetic Ingredients",
+    icon: "spa",
     description:
       "Dermatology-safe actives and intermediates for personal care innovators.",
     points: ["Clinically trusted", "High stability", "Supply assurance"],
@@ -50,12 +55,8 @@ const FeaturedCategories = () => {
               key={item.title}
               className="flex h-full flex-col rounded-3xl border border-base-200 bg-base-100 p-7 shadow-sm hover:-translate-y-1 transition"
             >
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-400 to-sky-500 text-white font-bold flex items-center justify-center text-lg">
-                {item.title
-                  .split(" ")
-                  .map((word) => word[0])
-                  .join("")
-                  .slice(0, 2)}
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-500 text-white font-bold flex items-center justify-center text-lg">
+                <MaterialIcon name={item.icon} className="text-2xl" />
               </div>
 
               <h3 className="mt-4 text-xl font-semibold text-base-content">

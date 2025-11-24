@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { Link, useParams } from "react-router-dom";
 import useProducts from "../../../hooks/useProducts.js";
 import siteConfig from "../../../config/siteConfig.js";
+import MaterialIcon from "../../MaterialIcon.jsx";
 
 const ProductInfo = () => {
   const { id } = useParams();
@@ -226,20 +227,7 @@ const DocumentLink = ({ label, url }) => (
       <p className="font-semibold">{label}</p>
       <p className="text-xs text-base-content/60">Opens in new tab</p>
     </div>
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      className="h-4 w-4"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth="1.6"
-        d="M14 3h7v7m0-7L10 14m0 0v7m0-7h7"
-      />
-    </svg>
+    <MaterialIcon name="open_in_new" className="text-lg" />
   </a>
 );
 

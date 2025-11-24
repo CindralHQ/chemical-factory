@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ThemeSelector from "./ThemeSelector.jsx";
 import siteConfig from "../config/siteConfig.js";
+import MaterialIcon from "./MaterialIcon.jsx";
 
 const Footer = () => {
   return (
@@ -19,16 +20,16 @@ const Footer = () => {
           </p>
           <ThemeSelector />
           <div className="flex gap-3 text-sm">
-            {Object.entries(siteConfig.social).map(([key, url]) => (
+            {siteConfig.socialLinks.map((link) => (
               <a
-                key={key}
-                href={url}
-                className="h-10 w-10 rounded-full border border-base-300 flex items-center justify-center hover:border-primary/50"
-                aria-label={`Visit our ${key} page`}
+                key={link.label}
+                href={link.href}
+                className="h-11 w-11 rounded-full border border-base-300 flex items-center justify-center hover:border-primary/50"
+                aria-label={`Visit our ${link.label} page`}
                 target="_blank"
                 rel="noreferrer"
               >
-                {key.slice(0, 2).toUpperCase()}
+                <MaterialIcon name={link.icon} className="text-base" />
               </a>
             ))}
           </div>
@@ -87,8 +88,22 @@ const Footer = () => {
           </div>
         </div>
       </div>
-      <div className="border-t border-base-300 text-center text-sm text-base-content/60 py-4">
-        © {new Date().getFullYear()} {siteConfig.company.name}. All rights reserved.
+      <div className="border-t border-base-300 text-center text-sm text-base-content/60 py-4 space-y-1">
+        <p>
+          © {new Date().getFullYear()} {siteConfig.company.name}. All rights reserved.
+        </p>
+        <p>
+          Website developed by{" "}
+          <a
+            href="https://cindral.org"
+            target="_blank"
+            rel="noreferrer"
+            className="link link-primary"
+          >
+            Cindral
+          </a>
+          .
+        </p>
       </div>
     </footer>
   );
