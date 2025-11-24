@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import siteConfig from "../config/siteConfig.js";
 
 const AboutUs = () => {
   const [content, setContent] = useState(localStorage.getItem("aboutContent") || "");
@@ -91,7 +92,7 @@ const AboutUs = () => {
         />
 
         <h1 className="relative text-5xl md:text-6xl font-extrabold text-white tracking-wide drop-shadow-xl">
-          About ChemNova
+          About {siteConfig.company.name}
         </h1>
       </section>
 

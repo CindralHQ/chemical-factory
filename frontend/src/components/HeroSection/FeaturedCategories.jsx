@@ -1,94 +1,89 @@
 import React from "react";
+
 const categories = [
   {
-    title: "Anti Bacterial / Anti Fungal",
+    title: "Antimicrobial Actives",
     description:
-      "We offer high-quality antibacterial and antifungal chemical solutions designed to support industrial and pharmaceutical applications.",
-    points: [
-      "High Purity Chemicals",
-      "Industrial-Grade Compounds",
-      "Wide Application Range",
-    ],
+      "High-purity antibacterial and antifungal molecules for disinfectants, hygiene and healthcare products.",
+    points: [">99% assay", "Stability tested", "Global registrations"],
   },
   {
-    title: "Polymer / Adhesive / Coating Intermediate",
+    title: "Polymer & Coating Intermediates",
     description:
-      "Our polymer and coating intermediates meet global standards, delivering strength, durability and adhesion performance.",
-    points: ["Advanced Polymers", "Adhesive Enhancers", "Coating Materials"],
+      "Advanced building blocks for adhesives, sealants and protective coatings with tight specs.",
+    points: ["Adhesion boost", "Weather resistant", "Low VOC"],
   },
   {
-    title: "API / Algo",
+    title: "API & Pharma Inputs",
     description:
-      "We provide reliable API solutions with consistent performance for pharmaceutical formulation requirements.",
-    points: ["Certified APIs", "Stable Formulations", "Trusted Quality"],
+      "Regulatory-compliant APIs and intermediates tailored for formulation scientists.",
+    points: ["DMF ready", "cGMP support", "Batch traceability"],
   },
   {
-    title: "Cosmetic Intermediate",
+    title: "Cosmetic Ingredients",
     description:
-      "Premium cosmetic intermediates used for skincare, haircare and personal beauty products with safe compositions.",
-    points: ["Dermatology Safe", "High Stability", "Premium Quality"],
+      "Dermatology-safe actives and intermediates for personal care innovators.",
+    points: ["Clinically trusted", "High stability", "Supply assurance"],
   },
 ];
+
 const FeaturedCategories = () => {
   return (
-    <div className="w-full py-16 bg-[#0f1216]">
-      {" "}
-      <div className="max-w-6xl mx-auto px-6">
-        {" "}
-        <h2 className="text-3xl font-bold text-center text-white mb-12">
-          {" "}
-          Featured Categories{" "}
-        </h2>{" "}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-          {" "}
-          {categories.map((item, index) => (
-            <div
-              key={index}
-              className=" h-full flex flex-col bg-[#1a1d23] shadow-lg rounded-3xl p-8 border border-gray-700 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:cursor-pointer "
+    <section className="w-full bg-base-100 py-16">
+      <div className="max-w-6xl mx-auto px-6 space-y-12">
+        <div className="text-center space-y-3">
+          <p className="uppercase tracking-[0.4em] text-xs text-primary/70">
+            focus areas
+          </p>
+          <h2 className="text-3xl font-bold text-base-content">
+            Where our chemistry shines
+          </h2>
+          <p className="text-base-content/70 max-w-2xl mx-auto">
+            A curated mix of applications that keep our labs buzzing. Explore
+            the categories to find the right fit for your next formulation.
+          </p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-2 xl:grid-cols-4">
+          {categories.map((item) => (
+            <article
+              key={item.title}
+              className="flex h-full flex-col rounded-3xl border border-base-200 bg-base-100 p-7 shadow-sm hover:-translate-y-1 transition"
             >
-              {" "}
-              {/* Icon Placeholder */}{" "}
-              <div className="w-12 h-12 rounded-xl bg-purple-200 flex items-center justify-center">
-                {" "}
-                <div className="w-6 h-6 bg-purple-500 rounded-lg"></div>{" "}
-              </div>{" "}
-              <h3 className="text-xl font-bold text-white mt-4">
+              <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-400 to-sky-500 text-white font-bold flex items-center justify-center text-lg">
+                {item.title
+                  .split(" ")
+                  .map((word) => word[0])
+                  .join("")
+                  .slice(0, 2)}
+              </div>
+
+              <h3 className="mt-4 text-xl font-semibold text-base-content">
                 {item.title}
-              </h3>{" "}
-              <p className="text-gray-300 text-sm leading-relaxed mt-2">
-                {" "}
-                {item.description}{" "}
-              </p>{" "}
-              {/* GROW AREA */}{" "}
-              <div className="flex-grow mt-4">
-                {" "}
-                <ul className="space-y-2">
-                  {" "}
-                  {item.points.map((p, i) => (
-                    <li
-                      key={i}
-                      className="flex items-center gap-2 text-gray-200 font-medium text-sm"
-                    >
-                      {" "}
-                      <span className="w-4 h-4 bg-green-500 rounded-full flex items-center justify-center text-white text-xs">
-                        {" "}
-                        ✓{" "}
-                      </span>{" "}
-                      {p}{" "}
-                    </li>
-                  ))}{" "}
-                </ul>{" "}
-              </div>{" "}
-              {/* BUTTON */}{" "}
-              <button className=" mt-6 w-full py-3 rounded-xl bg-purple-600 text-white font-semibold hover:bg-purple-700 transition ">
-                {" "}
-                Explore More{" "}
-              </button>{" "}
-            </div>
-          ))}{" "}
-        </div>{" "}
-      </div>{" "}
-    </div>
+              </h3>
+              <p className="mt-2 text-sm text-base-content/70 leading-relaxed">
+                {item.description}
+              </p>
+
+              <ul className="mt-4 space-y-2 text-sm text-base-content/80">
+                {item.points.map((point) => (
+                  <li key={point} className="flex items-center gap-2">
+                    <span className="h-5 w-5 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xs">
+                      ✓
+                    </span>
+                    {point}
+                  </li>
+                ))}
+              </ul>
+
+              <button className="mt-auto pt-6 text-left text-sm font-semibold text-primary hover:text-primary-focus">
+                Discover solutions {"->"}
+              </button>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 

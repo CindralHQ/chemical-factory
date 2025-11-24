@@ -1,212 +1,143 @@
-// import React from "react";
-// import { Phone, Mail, MapPin, Globe, Share2, Send, Pin } from "lucide-react";
-
-// const ContactUs = () => {
-//   return (
-//     <div className="w-full py-16 bg-[#0f1216] text-white">
-//       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 item-start">
-
-//         {/* LEFT PANEL */}
-//         <div className="bg-[#1a1d23] p-10 rounded-2xl shadow-lg border border-gray-700 flex flex-col">
-//           <div className="space-y-8">
-
-//             {/* Phone */}
-//             <div className="flex items-start gap-4">
-//               <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-//                 <Phone size={22} />
-//               </div>
-//               <div>
-//                 <p className="text-gray-300 text-sm">Have any question?</p>
-//                 <p className="font-semibold text-white">Free + 23 (000)-8050</p>
-//               </div>
-//             </div>
-
-//             {/* Email */}
-//             <div className="flex items-start gap-4">
-//               <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-//                 <Mail size={22} />
-//               </div>
-//               <div>
-//                 <p className="text-gray-300 text-sm">Send email</p>
-//                 <p className="font-semibold text-white">demo@gmail.com</p>
-//               </div>
-//             </div>
-
-//             {/* Location */}
-//             <div className="flex items-start gap-4">
-//               <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-//                 <MapPin size={22} />
-//               </div>
-//               <div>
-//                 <p className="text-gray-300 text-sm">Visit anytime</p>
-//                 <p className="font-semibold text-white">86391 Elgin St. Delaware</p>
-//               </div>
-//             </div>
-
-//           </div>
-
-//           {/* Image */}
-//           {/* <div className="mt-10">
-//             <img
-//               src="/images/research-scientist-lab.webp"
-//               alt="lab-scientist"
-//               className="rounded-xl w-full object-cover"
-//             />
-//           </div> */}
-
-//           {/* Social Icons */}
-//           <div className="flex gap-6 mt-6 text-gray-300 justify-center">
-//             <Globe className="hover:text-white cursor-pointer" size={22} />
-//             <Share2 className="hover:text-white cursor-pointer" size={22} />
-//             <Send className="hover:text-white cursor-pointer" size={22} />
-//             <Pin className="hover:text-white cursor-pointer" size={22} />
-//           </div>
-//         </div>
-
-//         {/* RIGHT PANEL */}
-//         <div className="p-4">
-//           <p className="text-purple-400 font-semibold tracking-widest">
-//             CONTACT WITH US
-//           </p>
-
-//           <h2 className="text-4xl font-bold mt-2 text-white">
-//             Feel free to write us anytime
-//           </h2>
-
-//           <div className="mt-8 space-y-6">
-
-//             {/* Row 1 */}
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//               <input
-//                 className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400"
-//                 placeholder="Your name"
-//               />
-//               <input
-//                 className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400"
-//                 placeholder="Email address"
-//               />
-//             </div>
-
-//             {/* Row 2 */}
-//             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-//               <input
-//                 className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400"
-//                 placeholder="Phone"
-//               />
-//               <input
-//                 className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400"
-//                 placeholder="Subject"
-//               />
-//             </div>
-
-//             {/* Message */}
-//             <textarea
-//               rows={6}
-//               className="bg-[#1a1d23] w-full p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400"
-//               placeholder="Write a message"
-//             />
-
-//             {/* Submit */}
-//             <button className="bg-purple-600 hover:bg-purple-700 transition text-white font-semibold px-8 py-3 rounded-xl">
-//               Send a message
-//             </button>
-//           </div>
-
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default ContactUs;
-
 import React from "react";
 import { Phone, Mail, MapPin, Globe, Share2, Send, Pin } from "lucide-react";
+import siteConfig from "../config/siteConfig.js";
+
+const contactDetails = [
+  {
+    icon: Phone,
+    label: "Chat with us",
+    value: siteConfig.contact.phone,
+    helper: "Dedicated chemical specialists",
+    href: `tel:${siteConfig.contact.phoneHref}`,
+  },
+  {
+    icon: Mail,
+    label: "Mail a brief",
+    value: siteConfig.contact.salesEmail,
+    helper: "Responses within 24 hours",
+    href: `mailto:${siteConfig.contact.salesEmail}`,
+  },
+  {
+    icon: MapPin,
+    label: "Visit our lab",
+    value: siteConfig.contact.address,
+    helper: "Mon - Fri, 9 am to 7 pm",
+  },
+];
+
+const socialIcons = [
+  { icon: Globe, href: siteConfig.social.website || "#" },
+  { icon: Share2, href: siteConfig.social.twitter || "#" },
+  { icon: Send, href: siteConfig.social.linkedin || "#" },
+  { icon: Pin, href: siteConfig.social.instagram || "#" },
+];
 
 const ContactUs = () => {
   return (
-    <div className="w-full py-16 bg-[#0f1216] text-white">
+    <section className="bg-base-200 py-16 text-base-content">
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-10 px-6 items-start">
-
-        {/* LEFT PANEL */}
-        <div className="bg-[#1a1d23] p-10 rounded-2xl shadow-lg border border-gray-700">
-          <div className="space-y-8">
-
-            {/* Phone */}
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-                <Phone size={22} />
-              </div>
-              <div>
-                <p className="text-gray-300 text-sm">Have any question?</p>
-                <p className="font-semibold">Free + 23 (000)-8050</p>
-              </div>
-            </div>
-
-            {/* Email */}
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-                <Mail size={22} />
-              </div>
-              <div>
-                <p className="text-gray-300 text-sm">Send email</p>
-                <p className="font-semibold">demo@gmail.com</p>
-              </div>
-            </div>
-
-            {/* Location */}
-            <div className="flex items-start gap-4">
-              <div className="w-12 h-12 rounded-full bg-purple-600 flex items-center justify-center">
-                <MapPin size={22} />
-              </div>
-              <div>
-                <p className="text-gray-300 text-sm">Visit anytime</p>
-                <p className="font-semibold">86391 Elgin St. Delaware</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Social Icons */}
-          <div className="flex gap-6 mt-10 text-gray-300 justify-center">
-            <Globe className="hover:text-white cursor-pointer" size={22} />
-            <Share2 className="hover:text-white cursor-pointer" size={22} />
-            <Send className="hover:text-white cursor-pointer" size={22} />
-            <Pin className="hover:text-white cursor-pointer" size={22} />
-          </div>
-        </div>
-
-        {/* RIGHT PANEL */}
-        <div className="p-4">
-          <p className="text-purple-400 font-semibold tracking-widest">
-            CONTACT WITH US
+        <div className="rounded-3xl border border-base-200 bg-base-100 p-10 shadow-lg">
+          <h3 className="text-xl font-semibold">
+            Let&apos;s build your next formulation
+          </h3>
+          <p className="mt-2 text-sm text-base-content/70">
+            Share your spec sheet or request a callback. Our chemists love
+            complex challenges.
           </p>
 
-          <h2 className="text-4xl font-bold mt-2 text-white">
-            Feel free to write us anytime
-          </h2>
-
           <div className="mt-8 space-y-6">
+            {contactDetails.map(({ icon: Icon, label, value, helper, href }) => (
+              <div key={label} className="flex items-start gap-4">
+                <div className="h-12 w-12 rounded-2xl bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white">
+                  <Icon size={22} />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.35em] text-base-content/60">
+                    {label}
+                  </p>
+                  {href ? (
+                    <a
+                      href={href}
+                      className="text-lg font-semibold text-base-content hover:text-primary"
+                    >
+                      {value}
+                    </a>
+                  ) : (
+                    <p className="text-lg font-semibold text-base-content">
+                      {value}
+                    </p>
+                  )}
+                  <p className="text-sm text-base-content/60">{helper}</p>
+                </div>
+              </div>
+            ))}
+          </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400" placeholder="Your name" />
-              <input className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400" placeholder="Email address" />
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <input className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400" placeholder="Phone" />
-              <input className="bg-[#1a1d23] p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400" placeholder="Subject" />
-            </div>
-
-            <textarea rows={6} className="bg-[#1a1d23] w-full p-4 rounded-xl border border-gray-700 text-white placeholder-gray-400" placeholder="Write a message" />
-
-            <button className="bg-purple-600 hover:bg-purple-700 transition text-white font-semibold px-8 py-3 rounded-xl">
-              Send a message
-            </button>
+          <div className="mt-8 flex gap-4 text-base-content/70">
+            {socialIcons.map(({ icon: Icon, href }, index) => (
+              <a
+                key={Icon.displayName || Icon.name || index}
+                href={href}
+                className="flex h-10 w-10 items-center justify-center rounded-full border border-base-200 bg-base-100 hover:border-primary/50"
+                target="_blank"
+                rel="noreferrer"
+              >
+                <Icon size={18} />
+              </a>
+            ))}
           </div>
         </div>
 
+        <div className="rounded-3xl border border-base-200 bg-base-100 p-6 sm:p-10 shadow-lg">
+          <p className="text-xs uppercase tracking-[0.4em] text-primary/80">
+            contact {siteConfig.company.name}
+          </p>
+          <h2 className="mt-3 text-3xl font-bold text-base-content">
+            Kick-start a project
+          </h2>
+          <p className="mt-2 text-sm text-base-content/70">
+            Fill the form and we will respond with data sheets, samples or a
+            call—whatever you prefer.
+          </p>
+
+          <form className="mt-8 space-y-5">
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+                placeholder="Your name"
+              />
+              <input
+                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+                placeholder="Email address"
+                type="email"
+              />
+            </div>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <input
+                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+                placeholder="Phone"
+                type="tel"
+              />
+              <input
+                className="input input-bordered border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+                placeholder="Company"
+              />
+            </div>
+
+            <textarea
+              rows={5}
+              className="textarea textarea-bordered w-full border-base-200 bg-base-100 text-base-content placeholder:text-base-content/50"
+              placeholder="Tell us about the molecule or grade you need"
+            />
+
+            <button type="submit" className="btn btn-primary w-full">
+              Send a message
+            </button>
+          </form>
+        </div>
       </div>
-    </div>
+    </section>
   );
 };
 

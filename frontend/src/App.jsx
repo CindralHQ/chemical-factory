@@ -1,24 +1,24 @@
-import React from 'react'
-import ProductCatalogue from './components/Product/ProductCatalogue/ProductCatalogue'
-import { Route, Routes } from 'react-router-dom'
-import ProductInfo from './components/Product/ProductInfo/ProductInfo'
-import HomeRouter from './assets/Router/HomeRouter'
-import AboutUsRouter from './assets/Router/AboutUsRouter'
+import React from "react";
+import { Route, Routes } from "react-router-dom";
+import ProductInfo from "./components/Product/ProductInfo/ProductInfo.jsx";
+import MainLayout from "./layouts/MainLayout.jsx";
+import Home from "./pages/Home.jsx";
+import About from "./pages/About.jsx";
+import Products from "./pages/Products.jsx";
+import Contact from "./pages/Contact.jsx";
 
 function App() {
- 
-
   return (
-    <>
-      
-      <Routes>
-        <Route path="/" element={<HomeRouter/>} />
-        <Route path="/about" element={<AboutUsRouter/>} />
-        <Route path="/products" element={<ProductCatalogue />} />
+    <Routes>
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/products" element={<Products />} />
         <Route path="/product/:id" element={<ProductInfo />} />
-      </Routes>
-    </>
-  )
+        <Route path="/contact" element={<Contact />} />
+      </Route>
+    </Routes>
+  );
 }
 
-export default App
+export default App;

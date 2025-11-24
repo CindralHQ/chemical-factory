@@ -1,111 +1,270 @@
-import React from "react";
-import { useParams } from "react-router-dom";
+import React, { useMemo } from "react";
+import { Link, useParams } from "react-router-dom";
+import useProducts from "../../../hooks/useProducts.js";
+import siteConfig from "../../../config/siteConfig.js";
 
 const ProductInfo = () => {
   const { id } = useParams();
-  const products = JSON.parse(localStorage.getItem("products")) || [];
-  const product = products.find((p) => p.id === Number(id));
+  const numericId = Number(id);
+  const { products, isLoading, error, reload } = useProducts();
 
-  if (!product) return <h1 className="text-center mt-20">Product Not Found</h1>;
+  const product = useMemo(
+    () => products.find((item) => Number(item.id) === numericId),
+    [products, numericId]
+  );
+
+  if (!product && isLoading) {
+    return (
+      <PageState title="Loading product details..." subtitle="Fetching fresh specs from the lab." />
+    );
+  }
+
+  if (!product && error) {
+    return (
+      <PageState
+        title="We hit a snag"
+        subtitle={error}
+        actionLabel="Retry"
+        action={reload}
+      />
+    );
+  }
+
+  if (!product) {
+    return (
+      <PageState
+        title="Product not found"
+        subtitle="Try browsing the catalogue or contact us for curated recommendations."
+        actionLabel="Back to catalogue"
+        actionHref="/products"
+      />
+    );
+  }
+
+  const quickFacts = [
+    { label: "CAS Number", value: product.casNo || "N/A" },
+    { label: "Category", value: product.category || "Not tagged yet" },
+    {
+      label: "Related",
+      value: product.relatedProducts?.trim() || "Will be updated soon",
+    },
+  ];
+
+  const documents = [
+    {
+      label: "TDS (Technical Data Sheet)",
+      url: product.tdsLink,
+    },
+    {
+      label: "MSDS (Safety Data Sheet)",
+      url: product.msdsLink,
+    },
+  ].filter((doc) => doc.url);
+
+  const relatedTags = product.relatedProducts
+    ?.split(",")
+    .map((tag) => tag.trim())
+    .filter(Boolean);
 
   return (
-    <div data-theme="dark" className="min-h-screen py-14 px-6">
-      <div className="max-w-6xl mx-auto space-y-12">
-        
-        {/* TOP SECTION — TITLE + CATEGORY */}
-        <div className="backdrop-blur-xl bg-white/40 p-10 rounded-2xl shadow-xl border border-white/30">
-          <div className="flex flex-col lg:flex-row items-center gap-12">
+    <div className="bg-base-100 text-base-content">
+      <div className="max-w-6xl mx-auto px-6 py-16 space-y-12">
+        <ProductHero product={product} hasDocuments={documents.length > 0} />
 
-            {/* Left Text */}
-            <div className="flex-1 space-y-4">
-              <h1 className="text-4xl lg:text-5xl font-extrabold text-gray-800 leading-tight">
-                {product.title}
-              </h1>
+        <section className="grid gap-6 md:grid-cols-3">
+          {quickFacts.map((item) => (
+            <SectionCard key={item.label} title={item.label}>
+              <p className="text-xl font-semibold">{item.value}</p>
+            </SectionCard>
+          ))}
+        </section>
 
-              <p className="text-gray-700 text-lg">{product.description}</p>
-
-              <p className="text-gray-700 text-lg font-semibold">
-                Category: <span className="font-normal">{product.category}</span>
+        <section className="grid gap-8 md:grid-cols-5">
+            <SectionCard className="md:col-span-3" title="About this molecule">
+              <p className="text-base-content/70 leading-relaxed text-lg">
+                {product.description ||
+                  "We are preparing a detailed description for this molecule. Contact our team for specifications meanwhile."}
               </p>
-            </div>
+            </SectionCard>
 
-            {/* Right — CAS NO */}
-            <div className="flex-1 flex justify-center lg:justify-end">
-              <div className="bg-white p-5 rounded-2xl shadow-lg border border-gray-200">
-                <div className="text-center space-y-2">
-                  <h3 className="font-bold text-gray-800 text-xl">CAS No.</h3>
-                  <p className="text-gray-700 text-lg">{product.casNo}</p>
-                </div>
+          <SectionCard className="md:col-span-2" title="Related solutions">
+            {relatedTags && relatedTags.length ? (
+              <div className="flex flex-wrap gap-3">
+                {relatedTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-base-200 px-4 py-2 text-sm text-base-content/80"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
+            ) : (
+              <p className="text-base-content/60 text-sm">
+                We are curating recommended pairings for this product.
+              </p>
+            )}
+          </SectionCard>
+        </section>
+
+        <section id="documents" className="grid gap-6 md:grid-cols-2">
+          <SectionCard title="Technical documents">
+            {documents.length ? (
+              <ul className="space-y-3">
+                {documents.map((doc) => (
+                  <li key={doc.label}>
+                    <DocumentLink label={doc.label} url={doc.url} />
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="text-base-content/60 text-sm">
+                Documentation upload in progress. Drop us a note if you need it
+                urgently.
+              </p>
+            )}
+          </SectionCard>
+
+          <SectionCard title="Need tailored specs?">
+            <p className="text-base-content/70">
+              Custom grades, different solvent systems or private-label
+              packaging—we can configure it for you.
+            </p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link to="/products" className="btn btn-primary btn-sm">
+                Compare other molecules
+              </Link>
+              <a
+                href={`mailto:${siteConfig.contact.email}`}
+                className="btn btn-ghost btn-sm text-base-content"
+              >
+                Talk to a chemist
+              </a>
             </div>
-
-          </div>
-        </div>
-
-        {/* ----- ABOUT PRODUCT ----- */}
-        <GlassSection title="📘 Product Description">
-          <p className="text-gray-800 leading-relaxed text-lg">
-            {product.description}
-          </p>
-        </GlassSection>
-
-        {/* ----- PRODUCT INFORMATION ----- */}
-        <GlassSection title="📊 Product Information">
-          <InfoList
-            items={[
-              ["CAS Number", product.casNo],
-              ["Category", product.category],
-              ["Related Products", product.relatedProducts],
-            ]}
-          />
-        </GlassSection>
-
-        {/* ----- DOCUMENTS ----- */}
-        <GlassSection title="📄 Technical Documents">
-          <InfoList
-            items={[
-              ["TDS (Technical Data Sheet)", product.tdsLink],
-              ["MSDS (Safety Data Sheet)", product.msdsLink],
-            ]}
-          />
-        </GlassSection>
+          </SectionCard>
+        </section>
       </div>
     </div>
   );
 };
 
-/* ======================================================= */
-/* =============== REUSABLE COMPONENTS ==================== */
-/* ======================================================= */
+const ProductHero = ({ product, hasDocuments }) => {
+  return (
+    <section className="relative isolate overflow-hidden rounded-3xl border border-base-200 bg-base-100 p-10 shadow-xl">
+      {product.image && (
+        <img
+          src={product.image}
+          alt={product.title}
+          className="absolute inset-y-0 right-0 h-full w-1/2 object-cover opacity-10 hidden lg:block"
+        />
+      )}
+      <div className="relative z-10 space-y-6">
+        <p className="text-xs uppercase tracking-[0.45em] text-primary/80">
+          {product.category || "Molecule overview"}
+        </p>
+        <h1 className="text-4xl md:text-5xl font-extrabold leading-tight text-base-content">
+          {product.title}
+        </h1>
+        <p className="max-w-3xl text-lg text-base-content/70 leading-relaxed">
+          {product.description ||
+            "High-performance chemical intermediate trusted across healthcare and specialty manufacturing."}
+        </p>
 
-const GlassSection = ({ title, children }) => (
-  <div className="backdrop-blur-xl bg-white/40 p-8 rounded-xl shadow-lg border border-white/30 space-y-3">
-    <h2 className="text-2xl font-bold text-gray-900">{title}</h2>
+        <div className="flex flex-wrap gap-4 text-sm font-semibold">
+          <span className="rounded-full bg-base-200 px-4 py-2 text-base-content/70">
+            CAS: {product.casNo || "TBD"}
+          </span>
+          {product.category && (
+            <span className="rounded-full border border-base-300 px-4 py-2 text-base-content/70">
+              {product.category}
+            </span>
+          )}
+          {hasDocuments && (
+            <span className="rounded-full bg-emerald-100 text-emerald-700 px-4 py-2">
+              Docs ready
+            </span>
+          )}
+        </div>
+
+        <div className="flex flex-wrap gap-4 pt-4">
+          <Link className="btn btn-primary" to="/products">
+            Back to catalogue
+          </Link>
+          {hasDocuments && (
+            <a
+              href="#documents"
+              className="btn btn-outline border-base-300 text-base-content"
+            >
+              View documents
+            </a>
+          )}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const SectionCard = ({ title, children, className = "" }) => (
+  <div
+    className={`rounded-3xl border border-base-200 bg-base-100 p-6 shadow-sm ${className}`}
+  >
+    <h2 className="text-sm uppercase tracking-[0.35em] text-base-content/60 mb-4">
+      {title}
+    </h2>
     {children}
   </div>
 );
 
-const InfoList = ({ items }) => (
-  <ul className="space-y-2 text-gray-800 text-lg">
-    {items.map(([label, value], index) => (
-      <li key={index}>
-        <strong>{label}: </strong>
+const DocumentLink = ({ label, url }) => (
+  <a
+    href={url}
+    target="_blank"
+    rel="noreferrer"
+    className="flex items-center justify-between rounded-2xl border border-base-200 bg-base-100 px-4 py-3 text-base-content transition hover:border-primary/40 hover:bg-base-200"
+  >
+    <div>
+      <p className="font-semibold">{label}</p>
+      <p className="text-xs text-base-content/60">Opens in new tab</p>
+    </div>
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-4 w-4"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.6"
+        d="M14 3h7v7m0-7L10 14m0 0v7m0-7h7"
+      />
+    </svg>
+  </a>
+);
 
-        {String(value).startsWith("http") ? (
-          <a
-            href={value}
-            target="_blank"
-            rel="noreferrer"
-            className="text-blue-700 underline"
-          >
-            View Document
-          </a>
+const PageState = ({ title, subtitle, actionLabel, action, actionHref }) => (
+  <div className="min-h-screen flex flex-col items-center justify-center bg-base-100 px-6 text-center text-base-content">
+    <h1 className="text-3xl font-bold">{title}</h1>
+    {subtitle && (
+      <p className="mt-4 max-w-xl text-base-content/70 leading-relaxed">
+        {subtitle}
+      </p>
+    )}
+    {actionLabel && (
+      <>
+        {actionHref ? (
+          <Link className="btn btn-primary mt-6" to={actionHref}>
+            {actionLabel}
+          </Link>
         ) : (
-          value
+          <button className="btn btn-primary mt-6" onClick={action}>
+            {actionLabel}
+          </button>
         )}
-      </li>
-    ))}
-  </ul>
+      </>
+    )}
+  </div>
 );
 
 export default ProductInfo;
