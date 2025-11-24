@@ -8,7 +8,7 @@ const AboutUs = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchFullData = async () => {
-    const res = await fetch("http://localhost:5000/api/about");
+    const res = await fetch("https://chemical-factory-nttr.vercel.app/api/about");
     const data = await res.json();
 
     setContent(data.content);
