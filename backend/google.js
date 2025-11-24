@@ -1,43 +1,121 @@
 // google.js
 import { google } from "googleapis";
 import dotenv from "dotenv";
-
 dotenv.config();
 
+// ===============================
+// 🔐 GOOGLE AUTH
+// ===============================
 const auth = new google.auth.GoogleAuth({
   credentials: {
     client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, "\n")
+    private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, "\n"),
   },
   scopes: [
     "https://www.googleapis.com/auth/spreadsheets.readonly",
     "https://www.googleapis.com/auth/documents.readonly",
-    "https://www.googleapis.com/auth/drive.readonly"
-  ]
+    "https://www.googleapis.com/auth/drive",
+  ],
 });
 
+// ===============================
+// 📌 Cache so we don't re-set permissions
+// ===============================
+const publicCache = new Set();
 
-// ------------------------------------------------------
-// 🔵 Convert Google Drive Share Links → Direct Image URL
-// ------------------------------------------------------
-function convertDriveLink(url) {
-  if (!url) return "";
+// ===============================
+// 🔵 Extract DRIVE FILE ID from any URL
+// ===============================
+export function extractDriveFileId(url) {
+  if (!url) return null;
 
-  // Match share links like:
-  // https://drive.google.com/file/d/FILE_ID/view?usp=sharing
-  const match = url.match(/\/d\/(.*?)\//);
+  const patterns = [
+    /\/d\/([^/]+)/,
+    /id=([^&]+)/,
+    /open\?id=([^&]+)/,
+    /uc\?export=view&id=([^&]+)/,
+  ];
 
-  if (match && match[1]) {
-    return `https://drive.google.com/uc?export=view&id=${match[1]}`;
+  for (const p of patterns) {
+    const match = url.match(p);
+    if (match) return match[1];
   }
-
-  return url; // already clean
+  return null;
 }
 
+// ===============================
+// 🔵 THUMBNAIL URL GENERATOR
+// ===============================
+export function getThumbnailURL(fileId, size = 300) {
+  return `https://drive.google.com/thumbnail?authuser=0&sz=w${size}&id=${fileId}`;
+}
 
-// ------------------------------------------------------
-// 🔵 GET GOOGLE DOC AS HTML
-// ------------------------------------------------------
+// ===============================
+// 🔵 Make file PUBLIC + return image URL
+// ===============================
+export async function getPublicImageURL(fileId, thumb = true) {
+  if (!fileId) return "";
+
+  const client = await auth.getClient();
+  const drive = google.drive({ version: "v3", auth: client });
+
+  // Only make public once
+  if (!publicCache.has(fileId)) {
+    try {
+      await drive.permissions.create({
+        fileId,
+        requestBody: {
+          role: "reader",
+          type: "anyone",
+        },
+      });
+      publicCache.add(fileId);
+    } catch (err) {
+      console.log("Permission already public or error:", err.message);
+      publicCache.add(fileId);
+    }
+  }
+
+  // Thumbnail mode (recommended for frontend)
+  if (thumb) {
+    return getThumbnailURL(fileId, 500); // you can change size
+  }
+
+  // Full-size download mode
+  return `https://drive.google.com/uc?export=view&id=${fileId}`;
+}
+
+// ===============================
+// 🔵 GET GOOGLE SHEET (Images auto → thumbnails)
+// ===============================
+export async function getSheet(sheetId) {
+  const client = await auth.getClient();
+  const sheets = google.sheets({ version: "v4", auth: client });
+
+  const res = await sheets.spreadsheets.values.get({
+    spreadsheetId: sheetId,
+    range: "Sheet1!A1:Z1000",
+  });
+
+  const rows = res.data.values || [];
+
+  const output = await Promise.all(
+    rows.map(async (row) =>
+      Promise.all(
+        row.map(async (cell) => {
+          const fileId = extractDriveFileId(cell);
+          return fileId ? await getPublicImageURL(fileId, true) : cell;
+        })
+      )
+    )
+  );
+
+  return output;
+}
+
+// ===============================
+// 🔵 GET GOOGLE DOC → HTML TEXT
+// ===============================
 export async function getDocWithMeta(docId) {
   const client = await auth.getClient();
   const docs = google.docs({ version: "v1", auth: client });
@@ -45,6 +123,7 @@ export async function getDocWithMeta(docId) {
   const res = await docs.documents.get({ documentId: docId });
 
   let html = "";
+
   for (const block of res.data.body.content || []) {
     if (!block.paragraph) continue;
 
@@ -56,47 +135,4 @@ export async function getDocWithMeta(docId) {
   }
 
   return { html };
-}
-
-
-// ------------------------------------------------------
-// 🔵 GET GOOGLE SHEET (Auto-convert Drive links)
-// ------------------------------------------------------
-export async function getSheet(sheetId) {
-  const client = await auth.getClient();
-  const sheets = google.sheets({ version: "v4", auth: client });
-
-  const res = await sheets.spreadsheets.values.get({
-    spreadsheetId: sheetId,
-    range: "Sheet1!A1:Z1000"
-  });
-
-  let rows = res.data.values || [];
-
-  // Convert every cell in sheet
-  rows = rows.map(row =>
-    row.map(col => convertDriveLink(col))
-  );
-
-  return rows;
-}
-
-
-// ------------------------------------------------------
-// 🔵 GET FILES FROM DRIVE FOLDER
-// ------------------------------------------------------
-export async function getDriveFiles(folderId) {
-  const drive = google.drive({ version: "v3", auth: await auth.getClient() });
-
-  const res = await drive.files.list({
-    q: `'${folderId}' in parents`,
-    fields: "files(id, name, mimeType)"
-  });
-
-  return res.data.files.map(file => ({
-    id: file.id,
-    name: file.name,
-    mimeType: file.mimeType,
-    url: `https://drive.google.com/uc?export=view&id=${file.id}`
-  }));
 }
