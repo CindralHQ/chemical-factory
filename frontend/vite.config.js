@@ -1,10 +1,11 @@
-import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite';
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
+import tailwindcss from "@tailwindcss/vite";
 
 export default defineConfig({
+  base: "/",           // ✅ MUST be here (not inside plugins)
   plugins: [
-    react(),      // REQUIRED for React 19
-    tailwindcss() // Tailwind plugin
+    react(),           // React 19 support 
+    tailwindcss()      // Tailwind plugin
   ],
 });
