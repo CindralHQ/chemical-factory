@@ -74,7 +74,7 @@ const Navbar = () => {
           </ul>
         </div>
         <div className="navbar-end">
-          <Link to="/products" className="btn btn-primary">
+          <Link to="/contact" className="btn btn-primary">
             Get Quote
           </Link>
         </div>

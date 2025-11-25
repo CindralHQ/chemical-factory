@@ -8,7 +8,7 @@ const AboutUs = () => {
   const [loading, setLoading] = useState(true);
 
   const fetchFullData = async () => {
-    const res = await fetch("https://chemical-factory-nttr.vercel.app/api/about");
+    const res = await fetch("http://localhost:3000/api/about");
     const data = await res.json();
 
     setContent(data.content);
@@ -58,7 +58,7 @@ const AboutUs = () => {
     const checkUpdate = async () => {
       if (!content) return fetchFullData();
 
-      const res = await fetch("https://chemical-factory-nttr.vercel.app/api/about", { method: "HEAD" });
+      const res = await fetch("http://localhost:3000/api/about", { method: "HEAD" });
       const latestEtag = res.headers.get("ETag");
 
       if (latestEtag !== etag) {

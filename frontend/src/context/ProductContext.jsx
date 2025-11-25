@@ -30,12 +30,12 @@ const resolveApiBase = () => {
       hostname === "::1";
 
     if (isLocalhost) {
-      return "http://localhost:5000";
+      return "http://localhost:3000";
     }
   }
 
   // 3. Default fallback (never used in production)
-  return "http://localhost:5000";
+  return "http://localhost:3000";
 };
 
 const API_BASE_URL = resolveApiBase();
