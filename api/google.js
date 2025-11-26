@@ -6,10 +6,24 @@ dotenv.config();
 // ===============================
 // 🔐 GOOGLE AUTH
 // ===============================
+
+function normalizePrivateKey(key) {
+  if (!key) return "";
+  
+  // Case 1: Vercel / production ----> contains "\n" as TEXT
+  if (key.includes("\\n")) {
+    return key.replace(/\\n/g, "\n");
+  }
+
+  // Case 2: Local machine ----> real newlines → already correct
+  return key;
+}
+
+
 const auth = new google.auth.GoogleAuth({
   credentials: {
     client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
-    private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY,
+    private_key: normalizePrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY),
   },
   scopes: [
     "https://www.googleapis.com/auth/spreadsheets.readonly",

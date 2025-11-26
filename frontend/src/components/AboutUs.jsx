@@ -1,14 +1,17 @@
 import React, { useEffect, useState } from "react";
 import siteConfig from "../config/siteConfig.js";
 
+
+
 const AboutUs = () => {
   const [content, setContent] = useState(localStorage.getItem("aboutContent") || "");
   const [etag, setEtag] = useState(localStorage.getItem("aboutEtag") || "");
   const [sections, setSections] = useState([]);
   const [loading, setLoading] = useState(true);
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const fetchFullData = async () => {
-    const res = await fetch("http://localhost:3000/api/about");
+    const res = await fetch(`${API_URL}/api/about`);
     const data = await res.json();
 
     setContent(data.content);
@@ -58,7 +61,7 @@ const AboutUs = () => {
     const checkUpdate = async () => {
       if (!content) return fetchFullData();
 
-      const res = await fetch("http://localhost:3000/api/about", { method: "HEAD" });
+      const res = await fetch(`${API_URL}/api/about`, { method: "HEAD" });
       const latestEtag = res.headers.get("ETag");
 
       if (latestEtag !== etag) {
