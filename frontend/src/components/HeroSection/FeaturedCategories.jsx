@@ -3,49 +3,69 @@ import MaterialIcon from "../MaterialIcon.jsx";
 
 const categories = [
   {
-    title: "Antimicrobial Actives",
-    icon: "coronavirus",
+    title: "Perfumery Ingredients",
+    icon: "local_florist",
+    gradient: "from-rose-400 to-orange-400",
     description:
-      "High-purity antibacterial and antifungal molecules for disinfectants, hygiene and healthcare products.",
-    points: [">99% assay", "Stability tested", "Global registrations"],
+      "Wide range of aroma chemicals, accords, and intermediates for fragrance, flavor, cosmetic, and incense industries.",
+    points: [
+      "High-purity synthesis",
+      "Consistent olfactory profile",
+      "Analytical validation (GC-MS)",
+    ],
   },
   {
-    title: "Polymer & Coating Intermediates",
-    icon: "ink_pen",
+    title: "Pheromone Intermediates",
+    icon: "pest_control",
+    gradient: "from-emerald-500 to-teal-500",
     description:
-      "Advanced building blocks for adhesives, sealants and protective coatings with tight specs.",
-    points: ["Adhesion boost", "Weather resistant", "Low VOC"],
+      "Specialized eco-friendly intermediates for insect population control, agriculture, and environmental management.",
+    points: [
+      "Non-toxic & Eco-friendly",
+      "Species-specific mating disruption",
+      "High stereochemical purity",
+    ],
   },
   {
-    title: "API & Pharma Inputs",
-    icon: "vaccines",
+    title: "Specialty Chemical Intermediates",
+    icon: "science",
+    gradient: "from-blue-500 to-cyan-500",
     description:
-      "Regulatory-compliant APIs and intermediates tailored for formulation scientists.",
-    points: ["DMF ready", "cGMP support", "Batch traceability"],
+      "Multi-industry specialty intermediates for pharma, agrochemicals, polymers, and performance materials.",
+    points: [
+      "Pharma & Agrochemicals",
+      "Polymer & Resin Production",
+      "Fine Chemicals & Dyes",
+    ],
   },
   {
-    title: "Cosmetic Ingredients",
-    icon: "spa",
+    title: "CRO Services",
+    icon: "biotech",
+    gradient: "from-violet-500 to-fuchsia-500",
     description:
-      "Dermatology-safe actives and intermediates for personal care innovators.",
-    points: ["Clinically trusted", "High stability", "Supply assurance"],
+      "Custom molecule development, process R&D, synthesis route optimization, and scale-up solutions.",
+    points: [
+      "Custom Synthesis (NCEs)",
+      "Process R&D & Scale-up",
+      "Confidential (NDA Support)",
+    ],
   },
 ];
 
 const FeaturedCategories = () => {
   return (
-    <section className="w-full bg-base-100 py-16">
-      <div className="max-w-6xl mx-auto px-6 space-y-12">
-        <div className="text-center space-y-3">
-          <p className="uppercase tracking-[0.4em] text-xs text-primary/70">
-            focus areas
+    <section className="w-full bg-base-100 py-20">
+      <div className="max-w-6xl mx-auto px-6 space-y-16">
+        <div className="text-center space-y-4">
+          <p className="uppercase tracking-[0.4em] text-xs font-bold text-primary">
+            Key Products & Services
           </p>
-          <h2 className="text-3xl font-bold text-base-content">
-            Where our chemistry shines
+          <h2 className="text-4xl font-extrabold text-base-content tracking-tight">
+            Excellence in Chemistry
           </h2>
-          <p className="text-base-content/70 max-w-2xl mx-auto">
-            A curated mix of applications that keep our labs buzzing. Explore
-            the categories to find the right fit for your next formulation.
+          <p className="text-base-content/70 max-w-2xl mx-auto text-lg">
+            From specialized aroma molecules to advanced contract research, we
+            deliver precision and quality across industries.
           </p>
         </div>
 
@@ -53,32 +73,39 @@ const FeaturedCategories = () => {
           {categories.map((item) => (
             <article
               key={item.title}
-              className="flex h-full flex-col rounded-3xl border border-base-200 bg-base-100 p-7 shadow-sm hover:-translate-y-1 transition"
+              className="group flex h-full flex-col rounded-3xl border border-base-200/50 bg-base-100 p-8 shadow-sm hover:shadow-2xl hover:border-primary/20 hover:-translate-y-2 transition-all duration-300 ease-out"
             >
-              <div className="h-12 w-12 rounded-2xl bg-gradient-to-br from-sky-500 to-indigo-500 text-white font-bold flex items-center justify-center text-lg">
-                <MaterialIcon name={item.icon} className="text-2xl" />
+              <div
+                className={`h-14 w-14 rounded-2xl bg-gradient-to-br ${item.gradient} text-white font-bold flex items-center justify-center text-lg shadow-lg group-hover:scale-110 transition-transform duration-300`}
+              >
+                <MaterialIcon name={item.icon} className="text-3xl" />
               </div>
 
-              <h3 className="mt-4 text-xl font-semibold text-base-content">
+              <h3 className="mt-6 text-xl font-bold text-base-content group-hover:text-primary transition-colors">
                 {item.title}
               </h3>
-              <p className="mt-2 text-sm text-base-content/70 leading-relaxed">
+              <p className="mt-3 text-sm text-base-content/70 leading-relaxed min-h-[80px]">
                 {item.description}
               </p>
 
-              <ul className="mt-4 space-y-2 text-sm text-base-content/80">
-                {item.points.map((point) => (
-                  <li key={point} className="flex items-center gap-2">
-                    <span className="h-5 w-5 rounded-full bg-emerald-500/10 text-emerald-600 flex items-center justify-center text-xs">
-                      ✓
-                    </span>
-                    {point}
-                  </li>
-                ))}
-              </ul>
+              <div className="mt-4 pt-4 border-t border-base-200">
+                <ul className="space-y-3 text-sm text-base-content/80">
+                  {item.points.map((point) => (
+                    <li key={point} className="flex items-start gap-3">
+                      <span className="mt-0.5 h-5 w-5 rounded-full bg-base-200 text-primary flex items-center justify-center text-[10px] font-bold shrink-0">
+                        <MaterialIcon name="check" className="text-sm" />
+                      </span>
+                      <span>{point}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
 
-              <button className="mt-auto pt-6 text-left text-sm font-semibold text-primary hover:text-primary-focus">
-                Discover solutions {"->"}
+              <button className="mt-auto pt-8 flex items-center gap-2 text-sm font-bold text-primary uppercase tracking-wider group/btn">
+                <span>Learn more</span>
+                <span className="transition-transform duration-300 group-hover/btn:translate-x-1">
+                  ->
+                </span>
               </button>
             </article>
           ))}
