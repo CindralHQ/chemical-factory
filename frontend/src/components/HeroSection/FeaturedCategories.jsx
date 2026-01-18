@@ -1,5 +1,6 @@
 import React from "react";
 import MaterialIcon from "../MaterialIcon.jsx";
+import { Link } from "react-router-dom";
 
 const categories = [
   {
@@ -51,6 +52,8 @@ const categories = [
     ],
   },
 ];
+
+const slugify = (str) => str.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
 
 const FeaturedCategories = () => {
   return (
@@ -104,9 +107,16 @@ const FeaturedCategories = () => {
               <button className="mt-auto pt-8 flex items-center gap-2 text-sm font-bold text-primary uppercase tracking-wider group/btn">
                 <span>Learn more</span>
                 <span className="transition-transform duration-300 group-hover/btn:translate-x-1">
-                  ->
+
                 </span>
               </button>
+
+              <Link
+                to={`/products/${slugify(item.title)}`}
+                className="mt-auto pt-5 text-sm font-semibold text-primary hover:text-primary-focus"
+              >
+                Discover solutions →
+              </Link>
             </article>
           ))}
         </div>

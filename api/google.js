@@ -9,7 +9,7 @@ dotenv.config();
 
 function normalizePrivateKey(key) {
   if (!key) return "";
-  
+
   // Case 1: Vercel / production ----> contains "\n" as TEXT
   if (key.includes("\\n")) {
     return key.replace(/\\n/g, "\n");
@@ -23,7 +23,11 @@ function normalizePrivateKey(key) {
 const auth = new google.auth.GoogleAuth({
   credentials: {
     client_email: process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL,
+
     private_key: normalizePrivateKey(process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY),
+
+    private_key: process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY.replace(/\\n/g, "\n"),
+
   },
   scopes: [
     "https://www.googleapis.com/auth/spreadsheets.readonly",
